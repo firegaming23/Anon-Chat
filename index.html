@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnonChat Pro | Private 1-on-1 Conversations</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-animation">
+        <div class="dot-flashing"></div>
+      </div>
+      <h2>AnonChat Pro</h2>
+      <p>Connecting securely...</p>
+    </div>
+
+    <!-- Main App Content -->
+    <div class="app-content">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="header-content">
+          <div class="logo">
+            <i class="fas fa-user-secret"></i>
+            <span>AnonChat</span>
+          </div>
+          <div class="header-controls">
+            <button id="darkToggle" class="icon-btn" title="Toggle Theme">
+              <i class="fas fa-moon"></i>
+            </button>
+            <div class="connection-status" id="connectionStatus">
+              <span class="status-dot"></span>
+              <span class="status-text">Connecting</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="app-main">
+        <!-- Onboarding Flow -->
+        <div class="onboarding-flow">
+          <!-- Welcome Screen -->
+          <div class="onboarding-screen active" id="welcomeScreen">
+            <div class="welcome-content">
+              <div class="welcome-animation">
+                <div class="chat-bubble left"></div>
+                <div class="chat-bubble right"></div>
+              </div>
+              <h1>Welcome to AnonChat</h1>
+              <p>Start anonymous 1-on-1 conversations with people worldwide</p>
+              <button class="primary-btn" id="getStartedBtn">Get Started</button>
+            </div>
+          </div>
+
+          <!-- Name Input -->
+          <div class="onboarding-screen" id="nameScreen">
+            <div class="form-container">
+              <h2>Enter Your Display Name</h2>
+              <p>This name will be visible to your chat partner</p>
+              <div class="input-group">
+                <input type="text" id="nameInput" placeholder="e.g. Anonymous123" maxlength="20">
+                <div class="input-helper">Max 20 characters</div>
+              </div>
+              <button class="primary-btn" id="nameNextBtn">Continue</button>
+            </div>
+          </div>
+
+          <!-- Gender Selection -->
+          <div class="onboarding-screen" id="genderScreen">
+            <div class="form-container">
+              <h2>Select Your Gender</h2>
+              <p>This helps us match you with a partner</p>
+              <div class="gender-options">
+                <div class="gender-card" data-gender="male">
+                  <div class="gender-icon">
+                    <i class="fas fa-mars"></i>
+                  </div>
+                  <h3>Male</h3>
+                </div>
+                <div class="gender-card" data-gender="female">
+                  <div class="gender-icon">
+                    <i class="fas fa-venus"></i>
+                  </div>
+                  <h3>Female</h3>
+                </div>
+                <div class="gender-card" data-gender="other">
+                  <div class="gender-icon">
+                    <i class="fas fa-genderless"></i>
+                  </div>
+                  <h3>Other</h3>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="secondary-btn" id="backToNameBtn">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="primary-btn" id="startChatBtn" disabled>Start Chatting</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Searching Screen -->
+          <div class="onboarding-screen" id="searchingScreen">
+            <div class="searching-content">
+              <div class="searching-animation">
+                <div class="searching-dots">
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                </div>
+              </div>
+              <h2>Finding Your Match</h2>
+              <p>Searching for an available partner...</p>
+              <div class="search-timer" id="searchTimer">
+                <div class="timer-progress" id="timerProgress"></div>
+                <span id="countdown">01:00</span>
+              </div>
+              <button class="secondary-btn" id="cancelSearchBtn">
+                Cancel Search
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="chat-interface" id="chatInterface">
+          <div class="chat-header">
+            <div class="partner-info">
+              <div class="partner-avatar" id="partnerAvatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="partner-details">
+                <h3 id="partnerName">Anonymous</h3>
+                <div class="typing-indicator" id="typingIndicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+            <button class="icon-btn" id="nextPartnerBtn" title="Next Partner">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+
+          <div class="chat-messages" id="chatMessages"></div>
+
+          <div class="chat-input-area">
+            <button class="icon-btn emoji-btn" id="emojiBtn">
+              <i class="far fa-smile"></i>
+            </button>
+            <div class="message-input-container">
+              <input type="text" id="messageInput" placeholder="Type your message...">
+              <div class="input-actions">
+                <button class="send-btn" id="sendBtn">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Connection Success Modal -->
+    <div class="modal" id="connectionSuccessModal">
+      <div class="modal-content">
+        <div class="success-animation">
+          <div class="checkmark">✓</div>
+        </div>
+        <h2>Connection Established!</h2>
+        <p>You're now chatting with <span id="connectedPartnerName">Anonymous</span></p>
+        <button class="primary-btn" id="startChattingBtn">Start Chatting</button>
+      </div>
+    </div>
+
+    <!-- Partner Skipped Modal -->
+    <div class="modal" id="partnerSkippedModal">
+      <div class="modal-content">
+        <div class="skipped-animation">
+          <i class="fas fa-user-slash"></i>
+        </div>
+        <h2>Partner Disconnected</h2>
+        <p><span id="skippedUserName">Anonymous</span> has ended the chat</p>
+        <div class="modal-actions">
+          <button class="secondary-btn" id="findNewPartnerBtn">
+            Find New Partner
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Partners Modal -->
+    <div class="modal" id="noPartnersModal">
+      <div class="modal-content">
+        <div class="empty-state">
+          <i class="fas fa-users-slash"></i>
+        </div>
+        <h2>No Partners Available</h2>
+        <p>There are currently no available users matching your preferences</p>
+        <div class="modal-actions">
+          <button class="secondary-btn" id="tryAgainBtn">
+            Try Again
+          </button>
+          <button class="primary-btn" id="changePrefsBtn">
+            Change Preferences
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  
+  <script src="main.js"></script>
+</body>
+</html>
